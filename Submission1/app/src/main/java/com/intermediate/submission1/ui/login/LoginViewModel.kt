@@ -1,0 +1,21 @@
+package com.intermediate.submission1.ui.login
+
+import android.content.Context
+import androidx.lifecycle.*
+import com.intermediate.submission1.data.repository.AuthRepository
+import com.intermediate.submission1.di.Injection
+
+class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
+    fun login(email: String, password: String) = authRepository.login(email, password)
+}
+
+class LoginViewModelFactory(private val context: Context) :
+    ViewModelProvider.NewInstanceFactory() {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
+            return LoginViewModel(Injection.provideAuthRepository(context)) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
+    }
+}
